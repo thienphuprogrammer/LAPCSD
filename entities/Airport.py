@@ -37,4 +37,3 @@ class Airport:
 
     def __len__(self):
         return len(self.code)
-

@@ -1,8 +1,11 @@
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
+# Project: PyCharm
+# File: main.py
+# Created by 22/01/2021
+from views.AirportView import AirportView
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    airport_file = 'data/airports.pkl'
+    route_file = 'data/routes.pkl'
+    airportView = AirportView(airport_file, route_file)
+    airportView.displayMenu()

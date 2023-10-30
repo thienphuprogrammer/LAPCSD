@@ -1,37 +1,40 @@
 class EdgeNode:
-    def __init__(self, v, w):
+    def __init__(self, v, cost):
         self.v = v
-        self.w = w
+        self.cost = cost
 
 
 class AdjacencyGraph:
-    def __init__(self, numVertices=0):
-        self.numVertices = numVertices  # number of vertices in the graph
+    def __init__(self):
+        self.numVertices = 0  # number of vertices in the graph
         self.mapVertices = {}  # dictionary mapping vertices to edges
 
-    def updateVertex(self, u, v, w):
-        if self.mapVertices.get(u) is None:
-            self.mapVertices[u] = []
-            self.mapVertices[u].append(EdgeNode(v, w))
-        else:
-            for item in self.mapVertices[u]:
-                if item.v == v:
-                    item.w = w
-                    break
-            else:
-                self.mapVertices[u].append(EdgeNode(v, w))
+    def getAllVertices(self):
+        return self.mapVertices
 
-    def addVertex(self, u, v, w=0):
-        if self.mapVertices.get(u) is None:
-            self.mapVertices[u] = []
-            self.mapVertices[u].append(EdgeNode(v, w))
-        else:
-            self.mapVertices[u].append(EdgeNode(v, w))
+    def addVertex(self, v: int):
+        if self.mapVertices.get(v) is None:
+            self.mapVertices[v] = []
+            self.numVertices += 1
 
-        self.numVertices += 1
+    def addEdge(self, fr: int, to: int, cost=0):
+        if fr not in self.mapVertices:
+            self.addVertex(fr)
+        if to not in self.mapVertices:
+            self.addVertex(to)
+        for v in self.mapVertices[fr]:
+            if v.v == to:
+                raise Exception("Edge already exists")
+        self.mapVertices[fr].append(EdgeNode(to, cost))
 
-    def getVertex(self):
-        return self.mapVertices.keys()
+    def updateEdge(self, fr: int, to: int, cost=0):
+        if fr not in self.mapVertices or to not in self.mapVertices:
+            raise Exception("Vertex does not exist")
+        for v in self.mapVertices[fr]:
+            if v.v == to:
+                v.w = cost
+                return
+        raise Exception("Edge does not exist")
 
     def getEdges(self):
         edges = []
@@ -40,22 +43,83 @@ class AdjacencyGraph:
                 edges.append((v, e.v, e.w))
         return edges
 
+    def getCost(self, fr: int, to: int):
+        for v in self.mapVertices[fr]:
+            if v.v == to:
+                return v.cost
+        raise Exception("Edge does not exist")
 
-G = AdjacencyGraph(5)
-G.addVertex("ALG", "ATL", 1)
-G.addVertex("ALG", "ORD", 2)
-G.addVertex("ATL", "ALG", 1)
-G.addVertex("ATL", "ORD", 1)
-G.addVertex("ATL", "LAX", 2)
-G.addVertex("ORD", "ALG", 2)
-G.addVertex("ORD", "ATL", 1)
-G.addVertex("ORD", "LAX", 2)
-G.addVertex("LAX", "ATL", 2)
-G.addVertex("LAX", "ORD", 2)
-print("Vertices of graph:", G.getVertex())
-for key, value in G.mapVertices.items():
-    print(key, end=": ")
-    for i in value:
-        print("{v:", i.v, ",w:", i.w, "}, ", end=" ")
+    def __DFS(self, fr: int, to: int, visited: dict, path: list, paths: list, cost):
+        visited[fr] = True
+        path.append(fr)
+        if fr == to:
+            paths.append({
+                "path": path.copy(),
+                "cost": cost
+            })
+        else:
+            for v in self.mapVertices[fr]:
+                if not visited[v.v]:
+                    self.__DFS(v.v, to, visited, path, paths, cost + v.cost)
+        path.pop()
+        visited[fr] = False
 
-    print()
+    def getAllPaths(self, fr: int, to: int):
+        visited = {}
+        for v in self.mapVertices:
+            visited[v] = False
+        path = []
+        paths = []
+        if fr not in self.mapVertices or to not in self.mapVertices:
+            raise Exception("Vertex does not exist")
+
+        self.__DFS(fr, to, visited, path, paths, 0)
+        return paths
+
+    def deleteVertex(self, v: int):
+        if v not in self.mapVertices:
+            raise Exception("Vertex does not exist")
+        del self.mapVertices[v]
+        for key in self.mapVertices:
+            for i in range(len(self.mapVertices[key])):
+                if self.mapVertices[key][i].v == v:
+                    del self.mapVertices[key][i]
+                    break
+
+    def deleteEdge(self, fr, to):
+        if fr not in self.mapVertices or to not in self.mapVertices:
+            raise Exception("Vertex does not exist")
+        for i in range(len(self.mapVertices[fr])):
+            if self.mapVertices[fr][i].v == to:
+                del self.mapVertices[fr][i]
+                return
+        raise Exception("Edge does not exist")
+
+# G = AdjacencyGraph()
+# G.addVertex(0)
+# G.addVertex(1)
+# G.addVertex(2)
+# G.addVertex(3)
+# G.addVertex(6)
+# G.addEdge(0, 1, 1)
+# G.addEdge(0, 2, 1)
+# G.addEdge(0, 3, 1)
+# G.addEdge(1, 0, 1)
+# G.addEdge(1, 3, 1)
+# G.addEdge(2, 0, 1)
+# G.addEdge(2, 3, 1)
+# G.addEdge(3, 0, 1)
+# G.addEdge(3, 1, 1)
+# G.addEdge(3, 2, 1)
+# G.addEdge(3, 4, 1)
+# G.addEdge(4, 3, 1)
+# G.addEdge(0, 4, 1)
+# G.addEdge(4, 0, 1)
+# G.addEdge(4, 2, 1)
+# G.addEdge(2, 4, 1)
+# G.getAllVertices()
+# G.deleteVertex(4)
+# print('After delete vertex 4')
+# G.getAllVertices()
+# print('All paths from 0 to 6')
+# print(G.getAllPaths(0, 6))
