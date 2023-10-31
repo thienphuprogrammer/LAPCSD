@@ -1,4 +1,4 @@
-# Project: PyCharm
+# Project: FlightManagement
 # File: main.py
 # Created by Nguyen Ngoc Thien Phu at 11:01 PM 2023/31/10
 from views.AirportView import AirportView
