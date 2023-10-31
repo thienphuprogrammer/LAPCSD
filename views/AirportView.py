@@ -1,4 +1,3 @@
-import os
 from enum import Enum
 
 from services.AirportService import AirportService
@@ -180,4 +179,3 @@ class AirportView:
             exit(0)
         except Exception as e:
             print(f'{RED}{e.args}{RESET}')
-
