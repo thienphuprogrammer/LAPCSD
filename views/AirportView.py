@@ -1,14 +1,17 @@
 from enum import Enum
-
 from services.AirportService import AirportService
 
-RED = "\033[91m"
-GREEN = "\033[92m"
-UNDERLINE = "\033[4m"
+RED = "\033[91m"  # Red text
+GREEN = "\033[92m"  # Green text
+UNDERLINE = "\033[4m"  # Underline text
 RESET = "\033[0m"  # Reset text color to default
 
 
 class AirportView:
+    """
+        Develop a robust data structure: Create an efficient data structure in the computer's memory
+        that optimizes query speed, ensuring seamless operation of the airport system.
+    """
     class AirportMenu(Enum):
         ADD_NEW_AIRPORT = 1
         ADD_NEW_ROUTE = 2

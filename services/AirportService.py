@@ -5,10 +5,6 @@ from entities.Airport import Airport
 
 
 class AirportService:
-    """
-        Develop a robust data structure: Create an efficient data structure in the computer's memory
-        that optimizes query speed, ensuring seamless operation of the airport system.
-    """
     def __init__(self):
         self.__airportRepository = AdjacencyGraph()
         self.__list_airports = []
