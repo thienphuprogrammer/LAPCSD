@@ -141,6 +141,10 @@ class AirportView:
             city = input('Enter airport city: ')
             state = input('Enter airport state: ')
             self.airportService.updateAirport(code, name, city, state)
+            airport = self.airportService.getAirportByCode(code)
+            print(f'Airport with code {GREEN}{airport.code}{RESET} has name {GREEN}{airport.name}{RESET}'
+                  f', city {GREEN}{airport.city}{RESET}'
+                  f', state {GREEN}{airport.state}{RESET}')
             print('Update airport successfully')
         except Exception as e:
             print(e.args)
