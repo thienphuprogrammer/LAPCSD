@@ -10,12 +10,12 @@ class AirportService:
         that optimizes query speed, ensuring seamless operation of the airport system.
     """
     def __init__(self):
-        self.airportRepository = AdjacencyGraph()
-        self.list_airports = []
+        self.__airportRepository = AdjacencyGraph()
+        self.__list_airports = []
 
     def getAirportByCode(self, code):
-        for airport in self.list_airports:
-            if airport.code == code:
+        for airport in self.__list_airports:
+            if airport.get_code() == code:
                 return airport
         return None
 
@@ -23,14 +23,14 @@ class AirportService:
     def addAirport(self, code, name, city, state):
         try:
             airport = Airport(code, name, city, state)
-            self.list_airports.append(airport)
-            self.airportRepository.addVertex(airport.code)
+            self.__list_airports.append(airport)
+            self.__airportRepository.addVertex(airport.get_code())
         except Exception as e:
             raise e
 
     def addRoute(self, from_airport, to_airport, cost):
         try:
-            self.airportRepository.addEdge(from_airport, to_airport, cost)
+            self.__airportRepository.addEdge(from_airport, to_airport, cost)
         except Exception as e:
             raise e
 
@@ -38,7 +38,7 @@ class AirportService:
     # providing a clear overview of the entire network.
     def getAllAirports(self):
         try:
-            return self.airportRepository.getAllVertices()
+            return self.__airportRepository.getAllVertices()
         except Exception as e:
             raise e
 
@@ -47,8 +47,8 @@ class AirportService:
     def searchAirportsByName(self, airport_name):
         try:
             list_air = []
-            for airport in self.list_airports:
-                if airport.name.find(airport_name) != -1:
+            for airport in self.__list_airports:
+                if airport.get_name().lower().find(airport_name.lower()) != -1:
                     list_air.append(airport)
             return list_air
         except Exception as e:
@@ -58,7 +58,7 @@ class AirportService:
     # (B), considering the directional and connected nature of the airport system.
     def calculateCost(self, from_airport, to_airport):
         try:
-            list_paths = self.airportRepository.getAllPaths(from_airport, to_airport)
+            list_paths = self.__airportRepository.getAllPaths(from_airport, to_airport)
             return list_paths
         except Exception as e:
             raise e
@@ -67,11 +67,11 @@ class AirportService:
     # unique ID, ensuring accurate and up-to-date information for each airport.
     def updateAirport(self, airport_code, airport_name, airport_city, airport_state):
         try:
-            for airport in self.list_airports:
-                if airport.code == airport.code:
-                    airport.name = airport_name
-                    airport.city = airport_city
-                    airport.state = airport_state
+            for airport in self.__list_airports:
+                if airport.get_code() == airport_code:
+                    airport.set_name(airport_name)
+                    airport.set_city(airport_city)
+                    airport.set_state(airport_state)
                     break
         except Exception as e:
             raise e
@@ -80,10 +80,10 @@ class AirportService:
     # as needed.
     def deleteAirport(self, airport_code):
         try:
-            self.airportRepository.deleteVertex(airport_code)
-            for airport in self.list_airports:
-                if airport.code == airport_code:
-                    self.list_airports.remove(airport)
+            self.__airportRepository.deleteVertex(airport_code)
+            for airport in self.__list_airports:
+                if airport.get_code() == airport_code:
+                    self.__list_airports.remove(airport)
         except Exception as e:
             raise e
 
@@ -92,23 +92,23 @@ class AirportService:
     def saveToFile(self, file_airports, file_routes):
         try:
             with open(file_airports, 'wb') as file:
-                pickle.dump(self.list_airports, file)
+                pickle.dump(self.__list_airports, file)
             with open(file_routes, 'wb') as file:
-                pickle.dump(self.airportRepository, file)
+                pickle.dump(self.__airportRepository, file)
         except Exception as e:
             raise e
 
     def loadFromFile(self, file_airports, file_routes):
         try:
             with open(file_airports, 'rb') as file:
-                self.list_airports = pickle.load(file)
+                self.__list_airports = pickle.load(file)
             with open(file_routes, 'rb') as file:
-                self.airportRepository = pickle.load(file)
+                self.__airportRepository = pickle.load(file)
         except Exception as e:
             raise e
 
     def deleteRoute(self, from_airport, to_airport):
         try:
-            self.airportRepository.deleteEdge(from_airport, to_airport)
+            self.__airportRepository.deleteEdge(from_airport, to_airport)
         except Exception as e:
             raise e
