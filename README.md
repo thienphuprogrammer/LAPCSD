@@ -2,24 +2,6 @@
 <head>
     <meta charset="utf-8">
     <title></title>
-    <style>
-        body {
-            font-family: "Courier New", Courier, monospace;
-            background-color: #000000;
-        }
-        .title {
-            font-family: "Lucida Console", "Courier New", Courier, monospace;
-            color: #ffffff;
-            font-size: 20px;
-            text-align: center;
-        }
-        .author {
-            font-family: "Lucida Console", "Courier New", Courier, monospace;
-            color: #ffffff;
-            font-size: 15px;
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
     <div class="header">
