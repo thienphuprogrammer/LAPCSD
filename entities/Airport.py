@@ -1,63 +1,63 @@
 class Airport:
     def __init__(self, code, name, city, state):
-        self.__code = code
-        self.__name = name
-        self.__city = city
-        self.__state = state
+        self.code = code
+        self.name = name
+        self.city = city
+        self.state = state
 
     def __str__(self):
-        return f'{self.__code} {self.__name} {self.__city} {self.__state}'
+        return f'{self.code} {self.name} {self.city} {self.state}'
 
     def __repr__(self):
-        return f'{self.__code} {self.__name} {self.__city} {self.__state}'
+        return f'{self.code} {self.name} {self.city} {self.state}'
 
     def __eq__(self, other):
-        return self.__code == other.__code
+        return self.code == other.code
 
     def __hash__(self):
-        return hash(self.__code)
+        return hash(self.code)
 
     def __lt__(self, other):
-        return self.__code < other.__code
+        return self.code < other.code
 
     def __gt__(self, other):
-        return self.__code > other.__code
+        return self.code > other.code
 
     def __le__(self, other):
-        return self.__code <= other.__code
+        return self.code <= other.code
 
     def __ge__(self, other):
-        return self.__code >= other.__code
+        return self.code >= other.code
 
     def __ne__(self, other):
-        return self.__code != other.__code
+        return self.code != other.code
 
     def __contains__(self, item):
-        return item in self.__code
+        return item in self.code
 
     def __len__(self):
-        return len(self.__code)
+        return len(self.code)
 
     def get_code(self):
-        return self.__code
+        return self.code
 
     def get_name(self):
-        return self.__name
+        return self.name
 
     def get_city(self):
-        return self.__city
+        return self.city
 
     def get_state(self):
-        return self.__state
+        return self.state
 
     def set_code(self, code):
-        self.__code = code
+        self.code = code
 
     def set_name(self, name):
-        self.__name = name
+        self.name = name
 
     def set_city(self, city):
-        self.__city = city
+        self.city = city
 
     def set_state(self, state):
-        self.__state = state
+        self.state = state

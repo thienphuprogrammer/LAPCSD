@@ -118,15 +118,15 @@ class AirportView:
             list_airports = self.__airportService.getAllAirports()
             for key, airport in list_airports.items():
                 from_airport = self.__airportService.getAirportByCode(key)
-                print(f'{RED}Airport{RESET} has code {GREEN}{from_airport.__code}{RESET}'
-                      f', name {GREEN}{from_airport.__name}{RESET}'
-                      f', city {GREEN}{from_airport.__city}{RESET}'
-                      f', state {GREEN}{from_airport.__state}{RESET}'
+                print(f'{RED}Airport{RESET} has code {GREEN}{from_airport.code}{RESET}'
+                      f', name {GREEN}{from_airport.name}{RESET}'
+                      f', city {GREEN}{from_airport.city}{RESET}'
+                      f', state {GREEN}{from_airport.state}{RESET}'
                       f' has routes: ')
                 for route in airport:
                     print(f' \t to airport has code {GREEN}{route.v}{RESET}'
-                          f', city {GREEN}{self.__airportService.getAirportByCode(route.v).__city}{RESET}'
-                          f', state {GREEN}{self.__airportService.getAirportByCode(route.v).__state}{RESET}'
+                          f', city {GREEN}{self.__airportService.getAirportByCode(route.v).city}{RESET}'
+                          f', state {GREEN}{self.__airportService.getAirportByCode(route.v).state}{RESET}'
                           f' with cost {GREEN}{route.cost}{RESET}')
         except Exception as e:
             print(f'{RED}{e.args}{RESET}')
@@ -139,10 +139,10 @@ class AirportView:
                 print(f'Not found airport with name {GREEN}{name}{RESET}')
                 return
             for airport in list_airports:
-                print(f'{RED}Airport{RESET} has code {GREEN}{airport.__code}{RESET}'
-                      f', name {GREEN}{airport.__name}{RESET}'
-                      f', city {GREEN}{airport.__city}{RESET}'
-                      f', state {GREEN}{airport.__state}{RESET}')
+                print(f'{RED}Airport{RESET} has code {GREEN}{airport.code}{RESET}'
+                      f', name {GREEN}{airport.name}{RESET}'
+                      f', city {GREEN}{airport.city}{RESET}'
+                      f', state {GREEN}{airport.state}{RESET}')
         except Exception as e:
             print(f'{RED}{e.args}{RESET}')
 
@@ -165,9 +165,9 @@ class AirportView:
             state = input('Enter airport state: ')
             self.__airportService.updateAirport(code, name, city, state)
             airport = self.__airportService.getAirportByCode(code)
-            print(f'Airport with code {GREEN}{airport.__code}{RESET} has name {GREEN}{airport.__name}{RESET}'
-                  f', city {GREEN}{airport.__city}{RESET}'
-                  f', state {GREEN}{airport.__state}{RESET}')
+            print(f'Airport with code {GREEN}{airport.code}{RESET} has name {GREEN}{airport.name}{RESET}'
+                  f', city {GREEN}{airport.city}{RESET}'
+                  f', state {GREEN}{airport.state}{RESET}')
             print(f'{GREEN}Update airport successfully{RESET}')
         except Exception as e:
             print(f'{RED}{e.args}{RESET}')
