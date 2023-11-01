@@ -37,27 +37,3 @@ class Airport:
 
     def __len__(self):
         return len(self.code)
-
-    def get_code(self):
-        return self.code
-
-    def get_name(self):
-        return self.name
-
-    def get_city(self):
-        return self.city
-
-    def get_state(self):
-        return self.state
-
-    def set_code(self, code):
-        self.code = code
-
-    def set_name(self, name):
-        self.name = name
-
-    def set_city(self, city):
-        self.city = city
-
-    def set_state(self, state):
-        self.state = state

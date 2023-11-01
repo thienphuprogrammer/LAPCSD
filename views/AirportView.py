@@ -124,10 +124,12 @@ class AirportView:
                       f', state {GREEN}{from_airport.state}{RESET}'
                       f' has routes: ')
                 for route in airport:
+                    to_airport = self.__airportService.getAirportByCode(route.v)
                     print(f' \t to airport has code {GREEN}{route.v}{RESET}'
-                          f', city {GREEN}{self.__airportService.getAirportByCode(route.v).city}{RESET}'
-                          f', state {GREEN}{self.__airportService.getAirportByCode(route.v).state}{RESET}'
-                          f' with cost {GREEN}{route.cost}{RESET}')
+                            f', name {GREEN}{to_airport.name}{RESET}'
+                            f', city {GREEN}{to_airport.city}{RESET}'
+                            f', state {GREEN}{to_airport.state}{RESET}'
+                            f' with cost {GREEN}{route.cost}{RESET}')
         except Exception as e:
             print(f'{RED}{e.args}{RESET}')
 
