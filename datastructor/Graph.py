@@ -1,3 +1,6 @@
+from random import randint
+
+
 class EdgeNode:
     def __init__(self, v, cost):
         self.v = v
@@ -25,16 +28,45 @@ class AdjacencyGraph:
         if self.mapVertices.get(v) is None:
             self.mapVertices[v] = []
             self.numVertices += 1
+        else:
+            raise Exception("Vertex already exists")
 
     def addEdge(self, fr: int, to: int, cost=0):
         if fr not in self.mapVertices:
-            self.addVertex(fr)
+            raise Exception("Vertex does not exist")
         if to not in self.mapVertices:
-            self.addVertex(to)
+            raise Exception("Vertex does not exist")
         for v in self.mapVertices[fr]:
             if v.v == to:
                 raise Exception("Edge already exists")
         self.mapVertices[fr].append(EdgeNode(to, cost))
+
+    def addEdgeUndirected(self, fr: int, to: int, cost=0):
+        if fr not in self.mapVertices:
+            raise Exception("Vertex does not exist")
+        if to not in self.mapVertices:
+            raise Exception("Vertex does not exist")
+        for v in self.mapVertices[fr]:
+            if v.v == to:
+                raise Exception("Edge already exists")
+        self.addEdge(fr, to, cost)
+        self.addEdge(to, fr, cost)
+
+    # Create a fully connected graph with random cost
+    def createFullyConnectedGraph(self, new_vertex: int):
+        if new_vertex in self.mapVertices:
+            raise Exception("Vertex already exists")
+        temp_map = self.mapVertices.copy()
+        for v in temp_map:
+            if v != new_vertex:
+                for e in self.mapVertices[v]:
+                    if e.v == new_vertex:
+                        raise Exception("Edge already exists")
+                cost = randint(1, 100)
+                if new_vertex not in self.mapVertices:
+                    self.addVertex(new_vertex)
+                self.addEdgeUndirected(v, new_vertex, cost)
+        temp_map = None
 
     def updateEdge(self, fr: int, to: int, cost=0):
         if fr not in self.mapVertices or to not in self.mapVertices:
@@ -103,6 +135,7 @@ class AdjacencyGraph:
                 del self.mapVertices[fr][i]
                 return
         raise Exception("Edge does not exist")
+
 
 # G = AdjacencyGraph()
 # G.addVertex(0)

@@ -14,14 +14,17 @@ class AirportView:
     """
     class AirportMenu(Enum):
         ADD_NEW_AIRPORT = 1
-        ADD_NEW_ROUTE = 2
-        DISPLAY_AIRPORT_INFORMATION = 3
-        SEARCH_AIRPORT_BY_NAME = 4
-        CALCULATE_COST = 5
-        UPDATE_AIRPORT_INFORMATION = 6
-        DELETE_AIRPORT = 7
-        DELETE_ROUTE = 8
-        EXIT = 9
+        ADD_NEW_ROUTE_DIRECTED = 2
+        ADD_NEW_ROUTE_UNDIRECTED = 3
+        ADD_FULLY_CONNECTED_AIRPORT = 4
+        DISPLAY_AIRPORT_INFORMATION = 5
+        SEARCH_AIRPORT_BY_NAME = 6
+        CALCULATE_COST = 7
+        UPDATE_AIRPORT_INFORMATION = 8
+        UPDATE_ROUTE_INFORMATION = 9
+        DELETE_AIRPORT = 10
+        DELETE_ROUTE = 11
+        EXIT = 12
 
     def __init__(self, airport_file='/data/airports.pkl', route_file='/data/routes.pkl'):
         self.__airportService = AirportService()
@@ -41,14 +44,17 @@ class AirportView:
                     choice = int(input('Enter your choice: '))
                     menu_choice = {
                         self.AirportMenu.ADD_NEW_AIRPORT.value: self.__addNewAirport,
-                        self.AirportMenu.ADD_NEW_ROUTE.value: self.__addNewRoute,
+                        self.AirportMenu.ADD_NEW_ROUTE_DIRECTED.value: self.__addNewRouteDirected,
+                        self.AirportMenu.ADD_NEW_ROUTE_UNDIRECTED.value: self.__addNewRouteUnDirected,
                         self.AirportMenu.DISPLAY_AIRPORT_INFORMATION.value: self.__displayAirportInformation,
                         self.AirportMenu.SEARCH_AIRPORT_BY_NAME.value: self.__searchAirportByName,
                         self.AirportMenu.CALCULATE_COST.value: self.__calculateCost,
                         self.AirportMenu.UPDATE_AIRPORT_INFORMATION.value: self.__updateAirportInformation,
                         self.AirportMenu.EXIT.value: self.__exit,
                         self.AirportMenu.DELETE_AIRPORT.value: self.__deleteAirport,
-                        self.AirportMenu.DELETE_ROUTE.value: self.__deleteRoute
+                        self.AirportMenu.DELETE_ROUTE.value: self.__deleteRoute,
+                        self.AirportMenu.ADD_FULLY_CONNECTED_AIRPORT.value: self.__addFullyConnectedAirport,
+                        self.AirportMenu.UPDATE_ROUTE_INFORMATION.value: self.__updateRouteInformation
                     }
                     if choice not in menu_choice:
                         print(f'{RED}Invalid choice{RESET}')
@@ -59,18 +65,48 @@ class AirportView:
                 except ValueError:
                     print(f'{RED}Invalid choice{RESET}')
         except KeyboardInterrupt:
-            print('\nDo you want to save to file? (y/n): ', end='')
-            choice = input()
-            if choice == 'y' or choice == 'Y':
-                self.__airportService.saveToFile(self.airport_file, self.route_file)
-                print(f'{GREEN}Save to file successfully{RESET}')
-            else:
-                print(f'{RED}Not save to file{RESET}')
-
-            print(f'{GREEN}Exit successfully{RESET}')
-            print(f'{GREEN}Thank you for using our service{RESET}')
-            print(f'{GREEN}Goodbye{RESET}')
+            self.__exit()
             exit(0)
+
+    def __updateRouteInformation(self):
+        try:
+            from_airport = input('Enter from airport: ')
+            if self.__airportService.getAirportByCode(from_airport) is None:
+                print(f'{RED}Airport with code {from_airport} does not exist{RESET}')
+                return
+            to_airport = input('Enter to airport: ')
+            if self.__airportService.getAirportByCode(to_airport) is None:
+                print(f'{RED}Airport with code {to_airport} does not exist{RESET}')
+                return
+            cost = int(input('Enter cost: '))
+            self.__airportService.updateRoute(from_airport, to_airport, cost)
+            print(f'{GREEN}Update route from {from_airport} to {to_airport} successfully{RESET}')
+        except Exception as e:
+            print(f'{RED}{e.args}{RESET}')
+
+    def __addFullyConnectedAirport(self):
+        try:
+            code = input('Enter airport code: ')
+            if self.__airportService.getAirportByCode(code) is not None:
+                print(f'{RED}Airport with code {code} already exists{RESET}')
+                return
+            name = input('Enter airport name: ')
+            city = input('Enter airport city: ')
+            state = input('Enter airport state: ')
+            self.__airportService.createFullyConnectedAirport(code, name, city, state)
+            print(f'{GREEN}Add new airport successfully{RESET}')
+        except Exception as e:
+            print(f'{RED}{e.args}{RESET}')
+
+    def __addNewRouteUnDirected(self):
+        try:
+            from_airport = input('Enter from airport: ')
+            to_airport = input('Enter to airport: ')
+            cost = int(input('Enter cost: '))
+            self.__airportService.addRouteUndirected(from_airport, to_airport, cost)
+            print(f'{GREEN}Add new route successfully{RESET}')
+        except Exception as e:
+            print(f'{RED}{e.args}{RESET}')
 
     def __deleteAirport(self):
         try:
@@ -103,7 +139,7 @@ class AirportView:
         except Exception as e:
             print(f'{RED}{e.args}{RESET}')
 
-    def __addNewRoute(self):
+    def __addNewRouteDirected(self):
         try:
             from_airport = input('Enter from airport: ')
             to_airport = input('Enter to airport: ')
@@ -176,11 +212,17 @@ class AirportView:
 
     def __exit(self):
         try:
-            self.__airportService.saveToFile(self.airport_file, self.route_file)
-            print(f'{GREEN}Save to file successfully{RESET}')
-            print(f'{GREEN}Exit successfully{RESET}')
-            print(f'{GREEN}Thank you for using our service{RESET}')
-            print(f'{GREEN}Goodbye{RESET}')
+            print('\nDo you want to save to file? (y/n): ', end='')
+            choice = input()
+            if choice == 'y' or choice == 'Y':
+                self.__airportService.saveToFile(self.airport_file, self.route_file)
+                print(f'{GREEN}Save to file successfully{RESET}')
+            else:
+                print(f'{RED}Not save to file{RESET}')
+
+                print(f'{GREEN}Exit successfully{RESET}')
+                print(f'{GREEN}Thank you for using our service{RESET}')
+                print(f'{GREEN}Goodbye{RESET}')
             exit(0)
         except Exception as e:
             print(f'{RED}{e.args}{RESET}')

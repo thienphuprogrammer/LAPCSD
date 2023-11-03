@@ -65,9 +65,9 @@ class AirportService:
         try:
             for airport in self.list_airports:
                 if airport.code == airport_code:
-                    airport.name(airport_name)
-                    airport.city(airport_city)
-                    airport.state(airport_state)
+                    airport.name = airport_name
+                    airport.city = airport_city
+                    airport.state = airport_state
                     break
         except Exception as e:
             raise e
@@ -76,10 +76,10 @@ class AirportService:
     # as needed.
     def deleteAirport(self, airport_code):
         try:
-            self.airportRepository.deleteVertex(airport_code)
             for airport in self.list_airports:
                 if airport.code == airport_code:
                     self.list_airports.remove(airport)
+            self.airportRepository.deleteVertex(airport_code)
         except Exception as e:
             raise e
 
@@ -106,5 +106,25 @@ class AirportService:
     def deleteRoute(self, from_airport, to_airport):
         try:
             self.airportRepository.deleteEdge(from_airport, to_airport)
+        except Exception as e:
+            raise e
+
+    def addRouteUndirected(self, from_airport, to_airport, cost):
+        try:
+            self.airportRepository.addEdgeUndirected(from_airport, to_airport, cost)
+        except Exception as e:
+            raise e
+
+    def createFullyConnectedAirport(self, code, name, city, state):
+        try:
+            airport = Airport(code, name, city, state)
+            self.airportRepository.createFullyConnectedGraph(airport.code)
+            self.list_airports.append(airport)
+        except Exception as e:
+            raise e
+
+    def updateRoute(self, from_airport, to_airport, cost):
+        try:
+            self.airportRepository.updateEdge(from_airport, to_airport, cost)
         except Exception as e:
             raise e
